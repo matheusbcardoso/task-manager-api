@@ -17,5 +17,6 @@ import { UsersModule } from '../users/users.module'; // Import UsersModule
   ],
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
+  exports: [JwtModule, AuthService],
 })
 export class AuthModule {}
