@@ -7,23 +7,23 @@ import { TasksRepository } from './repositories/tasks.repository';
 export class TasksService {
   constructor(private readonly tasksRepository: TasksRepository) {}
 
-  create(createTaskDto: CreateTaskDto) {
-    return this.tasksRepository.createTask(createTaskDto);
+  create(userId: number, createTaskDto: CreateTaskDto) {
+    return this.tasksRepository.createTask(userId, createTaskDto);
   }
 
-  findAll() {
-    return this.tasksRepository.findAllTasks();
+  findAll(userId: number) {
+    return this.tasksRepository.findAllTasks(userId);
   }
 
-  findOne(id: number) {
-    return this.tasksRepository.findOneTask(id);
+  findOne(userId: number, id: number) {
+    return this.tasksRepository.findOneTask(userId, id);
   }
 
-  update(id: number, updateTaskDto: UpdateTaskDto) {
-    return this.tasksRepository.updateTask(id, updateTaskDto);
+  update(userId: number, id: number, updateTaskDto: UpdateTaskDto) {
+    return this.tasksRepository.updateTask(userId, id, updateTaskDto);
   }
 
-  remove(id: number) {
-    return this.tasksRepository.deleteTask(id);
+  remove(userId: number, id: number) {
+    return this.tasksRepository.deleteTask(userId, id);
   }
 }

@@ -12,27 +12,40 @@ export class TasksRepository {
     private readonly repository: Repository<Task>,
   ) {}
 
-  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
-    const task = this.repository.create(createTaskDto);
+  async createTask(
+    userId: number,
+    createTaskDto: CreateTaskDto,
+  ): Promise<Task> {
+    const task = this.repository.create({
+      ...createTaskDto,
+      user: { id: userId },
+    });
     return await this.repository.save(task);
   }
 
-  findAllTasks(): Promise<Task[]> {
-    return this.repository.find();
+  findAllTasks(userId: number): Promise<Task[]> {
+    return this.repository.find({ where: { user: { id: userId } } });
   }
 
-  findOneTask(id: number): Promise<Task | null> {
-    return this.repository.findOne({ where: { id } });
+  findOneTask(userId: number, id: number): Promise<Task | null> {
+    return this.repository.findOne({ where: { id, user: { id: userId } } });
   }
 
-  async updateTask(id: number, updateTaskDto: UpdateTaskDto): Promise<void> {
-    const reulst = await this.repository.update(id, updateTaskDto);
+  async updateTask(
+    userId: number,
+    id: number,
+    updateTaskDto: UpdateTaskDto,
+  ): Promise<void> {
+    const reulst = await this.repository.update(
+      { id, user: { id: userId } },
+      updateTaskDto,
+    );
     if (reulst.affected === 0)
       throw new NotFoundException(`Task with ID ${id} not found`);
   }
 
-  async deleteTask(id: number): Promise<void> {
-    const result = await this.repository.delete(id);
+  async deleteTask(userId: number, id: number): Promise<void> {
+    const result = await this.repository.delete({ id, user: { id: userId } });
     if (result.affected === 0)
       throw new NotFoundException(`Task with ID ${id} not found`);
   }
